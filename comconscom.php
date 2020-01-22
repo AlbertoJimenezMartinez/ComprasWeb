@@ -7,128 +7,105 @@
     <link rel="stylesheet" href="bootstrap.min.css">
 </head>
 <body>
-    <h1>CONSULTA DE COMPRAS - RUBEN FEITO</h1>
+ <h1>CONSULTA DE COMPRAS ENTRE DOS FECHAS - ALBERTO</h1>
 <?php
-require "funciones.php";
-include "conexion.php";
+require "conexion.php";
 
-set_error_handler("errores"); // Establecemos la funcion que va a tratar los errores
+	/*Conexion a la Base de Datos*/
+	$conn=conectarBD();
+	// Establecemos la funcion que va a tratar los errores
+	set_error_handler("errores");
 
-$conn=conectarBD(); //conexion
 
 /* Se muestra el formulario la primera vez */
 if (!isset($_POST) || empty($_POST)) { 
-    /* Se inicializa la lista valores*/
-    $clientes = obtenerClientes($conn);
 
+	$clientes = obtenerClientes($conn);
+
+    /* Se inicializa la lista valores*/
 	echo '<form action="" method="post">';
 ?>
-<div class="container ">
-<!--Aplicacion-->
-<div class="card border-success mb-3" style="max-width: 30rem;">
-<div class="card-header">Datos</div>
-<div class="card-body">
-<div class="form-group">
-	<div class="form-group">
-	<label for="cliente">NIF CLIENTE:</label>
-	<select name="cliente">
-	<?php foreach($clientes as $cliente) : ?>
-    		<option> <?php echo $cliente ?> </option>
-    	<?php endforeach; ?>
-	</select>
-	</div>
-    <div class="form-group">
-        FECHA DESDE<input type="date" name="fecha_ini"" class="form-control">
-    </div>
-    <div class="form-group">
-        FECHA HASTA<input type="date" name="fecha_fin" class="form-control">
-    </div>
-		</BR>
+<div align="left">
+		<label for="clientes">Clientes:</label>
+		<select name="clientes">
+			<?php foreach($clientes as $cliente) : ?>
+				<option> <?php echo $cliente['nif'] ?> </option>
+			<?php endforeach; ?>
+		</select>
+		<br><br>
+		<label for="fechaIni">Introduzca la fecha desde la que empezar a buscar:&nbsp &nbsp  </label><input type='date' name='fechaIni'><br>
+		<label for="fechaFin">Introduzca la fecha para terminar de buscar:&nbsp &nbsp </label><input type='date' name='fechaFin'><br>
+</div>
+		</br>
 <?php
-	echo '<div><input type="submit" value="Consultar Compras"></div>
+	echo '<div><input type="submit" value="Comprar"></div>
 	</form>';
+} else { 
+
+	$cliente = $_POST['clientes'];
+	buscarCompras($conn, $cliente);	
 }
-if ($_SERVER["REQUEST_METHOD"] == "POST") { //comprobacion de request_method para el submit (valdria con un else)
-	//recogida de datos 
-
-	// Aquí va el código al pulsar submit
-    $cliente=$_REQUEST["cliente"]; //el del selector
-
-    $fecha_ini=strtotime($_REQUEST["fecha_ini"]);
-    $fecha_ini=date("Y-m-d", $fecha_ini);
-    if($fecha_ini==''){ 
-		trigger_error('La Fecha de inico no puede estar en blanco');
-    }
-    
-    $fecha_fin=strtotime($_REQUEST["fecha_fin"]);
-    $fecha_fin=date("Y-m-d", $fecha_fin);
-    if($fecha_fin==''){ 
-		trigger_error('La Fecha de fin no puede estar en blanco');
-    }
-
-    if($fecha_ini>$fecha_fin){
-        trigger_error('La Fecha de fin debe ser mayor que la Fecha inicio y viceversa');
-    }
-
-    query($conn, $cliente, $fecha_ini, $fecha_fin);
-}
-
-desconectarBD($conn); //desconexion
-
 ?>
 
 <?php
 // Funciones utilizadas en el programa
-function obtenerClientes($dbname) {
-	$clientes = array();
+
+function buscarCompras($conn, $nif) {
 	
-	$sql = "SELECT nif FROM CLIENTE";
-	
-	$resultado = mysqli_query($dbname, $sql);
-	if ($resultado) {
-		while ($row = mysqli_fetch_assoc($resultado)) {
-			$clientes[] = $row['nif'];
-		}
+	if (empty($_POST["fechaIni"])) {
+		trigger_error("La fecha de inicio no puede estar vacia");
 	}
-	return $clientes;
-}
-
-function query($conn, $cliente, $fecha_ini, $fecha_fin){
-    $compras = array();
-    $sql="SELECT fecha_compra FROM COMPRA WHERE DATE_FORMAT(fecha_compra,'%Y-%m-%d')>='$fecha_ini' AND DATE_FORMAT(fecha_compra,'%Y-%m-%d')<='$fecha_fin'";
-    $resultado=mysqli_query($conn, $sql);
-    if ($resultado) {
-		while ($row = mysqli_fetch_assoc($resultado)) {
-            $compras[] = $row['fecha_compra'];
+	else {
+	  $fecha=strtotime($_REQUEST['fechaIni']);
+	  $fechaInicio=date("Y-m-d",$fecha);
+	} 
+	if (empty($_POST["fechaFin"])) {
+		trigger_error("La fecha de fin no puede estar vacia");
+	}
+	else {
+	  $fecha=strtotime($_REQUEST['fechaFin']);
+	  $fechaFin=date("Y-m-d",$fecha);
+	} 
+	
+	$sql = "select compra.id_producto, nombre, precio, fecha_compra, unidades from producto, compra where compra.id_producto=producto.id_producto
+	and nif='$nif' and (fecha_compra>='$fechaInicio' and fecha_compra<='$fechaFin')";
+	$resultado= mysqli_query($conn, $sql);
+	if ($resultado) {
+		if (mysqli_num_rows($resultado)>0) {
+			echo "<table border='1'>";
+			echo "Estos son todos los productos del cliente ".$nif."<br><br>";
+			echo "<tr>";
+				echo "<td>Id del producto</td>";
+				echo "<td>Nombre del producto</td>";
+				echo "<td>Precio del producto</td>";
+				echo "<td>Fecha de compra del producto</td>";
+				echo "<td>Unidades</td>";
+				echo "</tr>";
+			while ($row = mysqli_fetch_assoc($resultado)) {
+				echo "<tr>";
+				echo "<td>".$row['id_producto']."</td>";
+				echo "<td>".$row['nombre']."</td>";
+				echo "<td>".$row['precio']."</td>";
+				echo "<td>".$row['fecha_compra']."</td>";
+				echo "<td>".$row['unidades']."</td>";
+				echo "</tr>";
+			}
+			echo "</table>";
+		} else {
+			echo "El cliente no hizo ninguna compra entre esas fechas";
 		}
-    }
+	} else {
+		echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+	}
 
-    if(count($compras)==0){
-        echo "El Cliente no realizo compras entre esas fechas";
-    }
-    else{
-        $total=0;
-        foreach ($compras as $compra){
-            $sql="SELECT COMPRA.id_producto, COMPRA.unidades, PRODUCTO.nombre, PRODUCTO.precio FROM COMPRA, PRODUCTO WHERE COMPRA.id_producto=PRODUCTO.id_producto AND COMPRA.fecha_compra='$compra'";
-            $resultado=mysqli_query($conn, $sql);
-            $row=mysqli_fetch_assoc($resultado);
-            $id_producto=$row['id_producto'];
-            $nombre=$row['nombre'];
-            $precio=$row['precio'];
-            $unidades=$row['unidades'];
-            $total=$total+($precio*$unidades);
-            ?><pre><?php
-            echo "Producto: ".$id_producto." ".$nombre.", Precio: ".$precio."€, Unidades: ".$unidades."</br>";
-            ?></pre><?php
-        }
-        ?><pre><?php
-        echo "Total ".$total."€</br>";
-        ?></pre><?php
-    }
 }
 
 ?>
 
+
+
 </body>
 
 </html>
+
+
