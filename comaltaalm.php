@@ -8,7 +8,7 @@
 </head>
 
 <body>
-<h1>ALTA CATEGORÍAS - Alberto</h1>
+<h1>ALTA ALMACEN - Alberto</h1>
 <?php
 require "conexion.php";
 
@@ -29,23 +29,20 @@ if (!isset($_POST) || empty($_POST)) {
 <div class="container ">
 <!--Aplicacion-->
 <div class="card border-success mb-3" style="max-width: 30rem;">
-<div class="card-header">Datos Categoría</div>
+<div class="card-header">Datos Almacen</div>
 <div class="card-body">
-		<div class="form-group">
-        ID CATEGORIA <input type="text" name="idcategoria" placeholder="idcategoria" class="form-control">
-        </div>
-		<div class="form-group">
-        NOMBRE CATEGORIA <input type="text" name="nombre" placeholder="nombre" class="form-control">
-        </div>
 
-		</BR>
+		<div class="form-group">
+        Localidad  &nbsp <input type="text" name="localidad" class="form-control">
+        </div>
+		</br>
 <?php
-	echo '<div><input type="submit" value="Alta Categoría"></div>
+	echo '<div><input type="submit" value="Alta Almacen"></div>
 	</form>';
 } else { 
 
 	// Aquí va el código al pulsar submit
-   crearCategoria($conn);
+   crearAlmacen($conn);
 	
 }
 ?>
@@ -53,41 +50,43 @@ if (!isset($_POST) || empty($_POST)) {
 <?php
 // Funciones utilizadas en el programa
 
-function crearCategoria($conn) {
+function crearAlmacen($conn) {
 
-	// Definicion funcion error_function
-	if (empty($_POST["idcategoria"])) {
-		trigger_error("La id no puede estar vacia");
+	if (empty($_POST["localidad"])) {
+		trigger_error("La localidad no puede estar vacia");
 	}
 	else {
-	  $id=$_POST['idcategoria'];
-	  limpiar_campos($id);
-	}
-	if (empty($_POST["nombre"])) {
-		trigger_error("El nombre no puede estar vacio");
-	}
-	else {
-	  $nombre=$_POST['nombre'];
-	  limpiar_campos($nombre);
+	  $localidad=$_POST['localidad'];
+	  limpiar_campos($localidad);
 	}
 
-	$sql = "INSERT INTO categoria (id_categoria, nombre) values ('$id','$nombre')";
-
-
-	//insertamos el empleado
-	if (mysqli_query($conn, $sql)) {
-		echo "La categoria se ha creado correctamente<br>";
-	} else {
-		trigger_error("Error: " . $sql . "<br>" . mysqli_error($conn));
+$num="";
+$sqlCod= "select max(num_almacen) from almacen";
+$resultado= mysqli_query($conn, $sqlCod);
+if ($resultado) {
+	if (mysqli_num_rows($resultado)>0) {
+		while ($row = mysqli_fetch_assoc($resultado)) {
+			$num=$row["max(num_almacen)"];
+			settype($num,'integer');
+			$num=$num+10;
+		}
 	}
-
+ 
+} else {
+    $num="10";
+	
 }
 
 
-	
+	$sql = "INSERT INTO almacen (num_almacen, localidad) values ('$num','$localidad')";
 
+	if (mysqli_query($conn, $sql)) {
+		echo "El almacen se ha creado correctamente<br>";
+	} else {
+		trigger_error("Error: " . $sql . "<br>" . mysqli_error($conn));
+	} 
 
-
+}
 
 ?>
 

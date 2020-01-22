@@ -2,7 +2,7 @@
 
 function conectarBD() {
 	/* Conexión BD */
-define('DB_SERVER', '10.130.11.187');
+define('DB_SERVER', 'localhost');
 define('DB_USERNAME', 'root');
 define('DB_PASSWORD', 'rootroot');
 define('DB_DATABASE', 'COMPRASWEB');
@@ -61,6 +61,67 @@ function obtenerCodigoCategoria($conn, $nombrecat) {
 	return $idCategoria;
 	
 }
+
+function obtenerAlmacenes($conn) {
+	$almacenes = array();
+	
+	$sql = "SELECT num_almacen FROM almacen";
+	
+	$resultado = mysqli_query($conn, $sql);
+	if ($resultado) {
+		while ($row = mysqli_fetch_assoc($resultado)) {
+			$almacenes[] = $row;
+		}
+	}
+	
+	return $almacenes;
+}
+
+function obtenerProductos($conn) {
+	$productos = array();
+	
+	$sql = "SELECT nombre FROM producto";
+	
+	$resultado = mysqli_query($conn, $sql);
+	if ($resultado) {
+		while ($row = mysqli_fetch_assoc($resultado)) {
+			$productos[] = $row;
+		}
+	}
+	
+	return $productos;
+}
+
+function obtenerIdProducto($conn, $nombreProducto) {
+	$idProducto = null;
+	
+	$sql = "SELECT id_producto FROM producto WHERE nombre = '$nombreProducto'";
+	$resultado = mysqli_query($conn, $sql);
+	if ($resultado) {
+		while ($row = mysqli_fetch_assoc($resultado)) {
+			$idProducto = $row['id_producto'];
+		}
+	}
+	
+	return $idProducto;
+	
+}
+
+function obtenerClientes($conn) {
+	$clientes = array();
+	
+	$sql = "SELECT nif FROM cliente";
+	
+	$resultado = mysqli_query($conn, $sql);
+	if ($resultado) {
+		while ($row = mysqli_fetch_assoc($resultado)) {
+			$clientes[] = $row;
+		}
+	}
+	
+	return $clientes;
+}
+
 
 
 ?>

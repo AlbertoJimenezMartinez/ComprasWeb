@@ -95,7 +95,7 @@ function insertarProducto($conn, $nombrecat) {
 	if (mysqli_query($conn, $sql)) {
 		echo "El producto se ha creado correctamente<br>";
 	} else {
-		echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+		trigger_error("Error: " . $sql . "<br>" . mysqli_error($conn));
 	}
 
 }
