@@ -9,6 +9,8 @@
 <body>
  <h1>CONSULTA DE COMPRAS ENTRE DOS FECHAS - ALBERTO</h1>
 <?php
+session_start();
+
 require "conexion.php";
 
 	/*Conexion a la Base de Datos*/
@@ -20,29 +22,20 @@ require "conexion.php";
 /* Se muestra el formulario la primera vez */
 if (!isset($_POST) || empty($_POST)) { 
 
-	$clientes = obtenerClientes($conn);
-
     /* Se inicializa la lista valores*/
 	echo '<form action="" method="post">';
 ?>
 <div align="left">
-		<label for="clientes">Clientes:</label>
-		<select name="clientes">
-			<?php foreach($clientes as $cliente) : ?>
-				<option> <?php echo $cliente['nif'] ?> </option>
-			<?php endforeach; ?>
-		</select>
-		<br><br>
 		<label for="fechaIni">Introduzca la fecha desde la que empezar a buscar:&nbsp &nbsp  </label><input type='date' name='fechaIni'><br>
 		<label for="fechaFin">Introduzca la fecha para terminar de buscar:&nbsp &nbsp </label><input type='date' name='fechaFin'><br>
 </div>
 		</br>
 <?php
-	echo '<div><input type="submit" value="Comprar"></div>
+	echo '<div><input type="submit" value="Buscar Compras"></div>
 	</form>';
 } else { 
 
-	$cliente = $_POST['clientes'];
+	$cliente = $_SESSION["nif"];
 	buscarCompras($conn, $cliente);	
 }
 ?>

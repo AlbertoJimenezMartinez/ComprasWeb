@@ -8,8 +8,10 @@
 </head>
 
 <body>
-<h1>ALTA CLIENTES - Alberto</h1>
+<h1>REGISTRO CLIENTES - Alberto</h1>
 <?php
+session_start();
+
 require "conexion.php";
 
 	/*Conexion a la Base de Datos*/
@@ -53,8 +55,9 @@ if (!isset($_POST) || empty($_POST)) {
 
 		</br>
 <?php
-	echo '<div><input type="submit" value="Alta Cliente"></div>
+	echo '<div><input type="submit" value="Registrar Cliente"></div>
 	</form>';
+	echo "<br>o <a href='index.php'>Iniciar Sesion</a>";
 } else { 
 
 	// Aquí va el código al pulsar submit
@@ -132,7 +135,8 @@ function crearCliente($conn) {
 
 	//insertamos el empleado
 	if (mysqli_query($conn, $sql)) {
-		echo "El cliente se ha creado correctamente<br>";
+		header('Location: index.php');
+		
 	} else {
 		trigger_error("Error: " . $sql . "<br>" . mysqli_error($conn));
 	}

@@ -10,7 +10,7 @@ alter table almacen add constraint pk_almacen primary key (num_almacen);
 create table producto (id_producto varchar(5), nombre varchar(40), precio double, id_categoria varchar(5));
 alter table producto add constraint pk_producto primary key (id_producto); 
 alter table producto add constraint fk_prod_cat foreign key (id_categoria) references categoria(id_categoria); 
-create table compra (nif varchar(9), id_producto varchar(5), fecha_compra datetime, unidades integer);
+create table compra (nif varchar(9), id_producto varchar(5), fecha_compra date, unidades integer);
 alter table compra add constraint pk_compra primary key (nif,id_producto,fecha_compra); 
 alter table compra add constraint fk_com_cli foreign key (nif) references cliente(nif);  
 alter table compra add constraint fk_com_pro foreign key (id_producto) references producto(id_producto); 
