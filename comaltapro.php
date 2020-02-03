@@ -11,7 +11,10 @@
 <h1>ALTA PRODUCTOS - Alberto</h1>
 <?php
 require "conexion.php";
-
+//si no has iniciado sesion, volvemos al login
+if (!isset($_SESSION['nombre'])){
+	header("Location: index.php");
+}
 	$conn=conectarBD();
 	// Establecemos la funcion que va a tratar los errores
 	set_error_handler("errores");

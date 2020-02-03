@@ -15,6 +15,8 @@ if (!isset($_POST) || empty($_POST)){
 	session_unset();
 	session_destroy(); 
 }
+
+
 require "conexion.php";
 
 	/*Conexion a la Base de Datos*/
@@ -88,41 +90,6 @@ function iniciosesion($conn) {
 	
 
 }
-/* 
-function sesioniniciada($conn) {
-
-	// Definicion funcion error_function	
-	  $nombre=$_POST['nombre'];
-	  limpiar_campos($nombre); 
-	  $contraseña=strrev($_POST['contraseña']);
-
-	$sql = "select nif from cliente where nombre='$nombre' and apellido='$contraseña'";
-
-	// insertamos el empleado
-	$resultado= mysqli_query($conn, $sql);
-	if ($resultado) {
-		if (mysqli_num_rows($resultado)>0) {
-			$row = mysqli_fetch_assoc($resultado);
-			$_SESSION['nombre'] = $nombre;
-			$cookie_name = "usuario";
-			$cookie_value = $nombre. " ".$contraseña;
-			setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/");
-			
-			echo "Has iniciado Sesion: ".$_SESSION['nombre'];
-			echo "<br><br><a href='cominicio.html'>Ir a los distintos metodos</a>";
-			echo "<br><br><a href='logout.php'>Cerrar Sesion</a>";
-			
-		} else {
-			echo "Los datos introducidos no son correctos";
-			echo "<br><br><a href='login.php'>Volver</a>";
-		}
-	} else {
-		trigger_error("Error: " . $sql . "<br>" . mysqli_error($conn));
-	}
-	
-	
-
-} */
 
 ?>
 

@@ -11,6 +11,10 @@
 <h1>COMPRAR PRODUCTOS - Alberto</h1>
 <?php
 require "conexion.php";
+//si no has iniciado sesion, volvemos al login
+if (!isset($_SESSION['nombre'])){
+	header("Location: index.php");
+}
 
 	/*Conexion a la Base de Datos*/
 	$conn=conectarBD();

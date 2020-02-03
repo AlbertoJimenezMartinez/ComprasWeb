@@ -19,7 +19,7 @@ alter table almacena add constraint pk_almacena primary key (num_almacen,id_prod
 alter table almacena add constraint fk_alm_alm foreign key (num_almacen) references almacen(num_almacen);  
 alter table almacena add constraint fk_alm_pro foreign key (id_producto) references producto(id_producto); 
 
-
+insert into cliente (nif, nombre, apellido, cp, direccion, ciudad) values ('00000000X', 'admin', 'admin', '00000', 'confidencial', 'Confidencial');
 
 
 

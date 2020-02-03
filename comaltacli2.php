@@ -11,7 +11,10 @@
 <h1>REGISTRO CLIENTES - Alberto</h1>
 <?php
 session_start();
-
+//si no has iniciado sesion, volvemos al login
+if (!isset($_SESSION['nombre'])){
+	header("Location: index.php");
+}
 require "conexion.php";
 
 	/*Conexion a la Base de Datos*/
