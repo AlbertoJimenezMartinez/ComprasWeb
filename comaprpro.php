@@ -10,6 +10,7 @@
 <body>
 <h1>ASIGNAR PRODUCTOS AL ALMACEN - Alberto</h1>
 <?php
+session_start();
 require "conexion.php";
 //si no has iniciado sesion, volvemos al login
 if (!isset($_SESSION['nombre'])){
@@ -54,6 +55,8 @@ if (!isset($_POST) || empty($_POST)) {
 <?php
 	echo '<div><input type="submit" value="Asignar Productos"></div>
 	</form>';
+	echo '<form action="cominicio.php" method="post"><input type="submit" value="Volver"></form><div>';
+
 } else { 
 
 	$almacen = $_POST['almacenes'];

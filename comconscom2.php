@@ -36,6 +36,8 @@ if (!isset($_POST) || empty($_POST)) {
 <?php
 	echo '<div><input type="submit" value="Buscar Compras"></div>
 	</form>';
+	echo '<form action="cominicio.php" method="post"><input type="submit" value="Volver"></form><div>';
+	
 } else { 
 
 	$cliente = $_SESSION["nif"];

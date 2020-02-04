@@ -10,6 +10,7 @@
 <body>
 <h1>ALTA PRODUCTOS - Alberto</h1>
 <?php
+session_start();
 require "conexion.php";
 //si no has iniciado sesion, volvemos al login
 if (!isset($_SESSION['nombre'])){
@@ -54,6 +55,7 @@ if (!isset($_POST) || empty($_POST)) {
 <?php
 	echo '<div><input type="submit" value="Alta Producto"></div>
 	</form>';
+	echo '<form action="cominicio.php" method="post"><input type="submit" value="Volver"></form><div>';
 } else { 
 
 	$categoria = $_POST['categoria'];

@@ -10,6 +10,7 @@
 <body>
 <h1>COMPRAR PRODUCTOS - Alberto</h1>
 <?php
+session_start();
 require "conexion.php";
 //si no has iniciado sesion, volvemos al login
 if (!isset($_SESSION['nombre'])){
@@ -55,6 +56,7 @@ if (!isset($_POST) || empty($_POST)) {
 <?php
 	echo '<div><input type="submit" value="Comprar"></div>
 	</form>';
+	echo '<form action="cominicio.php" method="post"><input type="submit" value="Volver"></form><div>';
 } else { 
 
 	$cliente = $_POST['clientes'];

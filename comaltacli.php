@@ -58,6 +58,8 @@ if (!isset($_POST) || empty($_POST)) {
 <?php
 	echo '<div><input type="submit" value="Alta Cliente"></div>
 	</form>';
+	echo '<form action="cominicio.php" method="post"><input type="submit" value="Volver"></form><div>';
+
 } else { 
 
 	// Aquí va el código al pulsar submit

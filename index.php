@@ -26,7 +26,7 @@ require "conexion.php";
 
 
 /* Se muestra el formulario la primera vez */
-if (!isset($_POST) || empty($_POST) ) { 
+if (!isset($_POST) || empty($_POST)) { 
 	echo '<form action="" method="post">';
 ?>
 <div class="container ">
