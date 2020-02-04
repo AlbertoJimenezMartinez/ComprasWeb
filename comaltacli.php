@@ -89,7 +89,7 @@ function crearCliente($conn) {
 		}
 		
 	} else {
-		trigger_error("El dni no tiene 8 caracteres");
+		trigger_error("El dni no tiene 9 caracteres");
 	}
 	
 	if (empty($_POST["nombre"])) {
